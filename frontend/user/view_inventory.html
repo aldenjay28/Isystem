@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Inventory</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../js/view_inventory.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>View Inventory</h1>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="view_inventory.html" class="active">Inventory</a>
+            <a href="../logout.html">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <section class="inventory-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-table">
+                    <!-- Items will be loaded here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

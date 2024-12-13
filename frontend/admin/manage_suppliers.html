@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Manage Suppliers</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Manage Suppliers</h1>
+    </header>
+    <main>
+        <form id="add-supplier-form">
+            <label>Supplier Name:</label>
+            <input type="text" name="name" required>
+            <label>Contact Info:</label>
+            <input type="text" name="contact" required>
+            <label>Performance Rating:</label>
+            <input type="number" name="rating" step="1" min="0" max="5" required>
+            <button type="submit">Add Supplier</button>
+        </form>
+        <h2>Suppliers List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact Info</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody id="supplier-list"></tbody>
+        </table>
+        <script src="../js/manage_suppliers.js"></script>
+    </main>
+</body>
+</html>

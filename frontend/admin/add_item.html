@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Add Inventory Item</h1>
+    </header>
+    <main>
+        <form id="add-item-form">
+            <label>Name:</label>
+            <input type="text" name="name" required>
+            <label>Category:</label>
+            <input type="text" name="category">
+            <label>Quantity:</label>
+            <input type="number" name="quantity" required>
+            <label>Price:</label>
+            <input type="number" step="0.01" name="price" required>
+            <button type="submit">Add Item</button>
+        </form>
+        <script src="../js/add_item.js"></script>
+    </main>
+</body>
+</html>

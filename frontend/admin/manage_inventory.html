@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Inventory</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../js/manage_inventory.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Manage Inventory</h1>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="manage_inventory.html" class="active">Inventory</a>
+            <a href="reports.html">Reports</a>
+            <a href="manage_users.html">Manage Users</a>
+            <a href="../logout.html">Logout</a>
+        </nav>
+    </header>
+    <main>
+
+        <div class="search-filter-container">
+            <input type="text" id="search-bar" placeholder="Search inventory...">
+            <select id="category-filter">
+                <option value="all">All Categories</option>
+                <option value="dairy">Dairy</option>
+                <option value="meat">Meat</option>
+                <option value="produce">Produce</option>
+            </select>
+            <button onclick="searchInventory()">Search</button>
+        </div>
+        <table id="inventory-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Inventory rows go here -->
+            </tbody>
+        </table>
+        <script>
+        async function searchInventory() {
+            const search = document.getElementById('search-bar').value;
+            const category = document.getElementById('category-filter').value;
+        
+            const response = await fetch(`../../backend/inventory/search_items.php?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}`);
+            const data = await response.json();
+        
+            const tableBody = document.getElementById('inventory-table').querySelector('tbody');
+            tableBody.innerHTML = data.items.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price}</td>
+                </tr>
+            `).join('');
+        }
+        </script>
+
+
+        <section class="inventory-actions">
+            <button onclick="location.href='add_item.html';">Add New Item</button>
+        </section>
+        <section class="inventory-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-table">
+                    <!-- Inventory rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+        async function addItem() {
+            const response = await fetch('../../backend/inventory/add_item.php', {
+                method: 'POST',
+                body: new FormData(document.getElementById('add-item-form'))
+            });
+    
+            const result = await response.json();
+            if (response.ok) {
+                showNotification('success', result.message);
+            } else {
+                showNotification('error', result.error);
+            }
+        }
+    </script>
+    <script>
+        let currentPage = 1;
+    
+        async function loadInventory(page = 1) {
+            const response = await fetch(`../../backend/inventory/view_items.php?page=${page}`);
+            const data = await response.json();
+    
+            const tableBody = document.getElementById('inventory-table');
+            tableBody.innerHTML = data.items.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price}</td>
+                </tr>
+            `).join('');
+    
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = Array.from({ length: data.total_pages }, (_, i) => `
+                <button onclick="loadInventory(${i + 1})">${i + 1}</button>
+            `).join('');
+        }
+    
+        loadInventory();
+    </script>
+    
+</body>
+</html>

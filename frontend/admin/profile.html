@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Profile Management</h1>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="manage_users.html">Manage Users</a>
+            <a href="profile.html">Profile</a>
+            <a href="../../backend/auth/logout.php">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <div id="profile-container">
+            <img id="profile-picture" src="" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;">
+            <form id="update-profile-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone">
+                <button type="button" onclick="updateProfile()">Update Profile</button>
+            </form>
+            <form id="upload-picture-form" enctype="multipart/form-data">
+                <label for="profile_picture">Change Profile Picture:</label>
+                <input type="file" name="profile_picture" accept="image/*">
+                <button type="button" onclick="uploadProfilePicture()">Upload Picture</button>
+            </form>
+        </div>
+    </main>
+    <script>
+        async function loadProfile() {
+            const response = await fetch('../../backend/profile/view_profile.php');
+            const data = await response.json();
+
+            if (response.ok) {
+                document.getElementById('name').value = data.profile.name;
+                document.getElementById('email').value = data.profile.email;
+                document.getElementById('phone').value = data.profile.phone;
+
+                const profilePicture = data.profile.profile_picture || 'default-profile.png';
+                document.getElementById('profile-picture').src = `../../uploads/${profilePicture}`;
+            } else {
+                alert(data.error);
+            }
+        }
+
+        async function updateProfile() {
+            const formData = new FormData(document.getElementById('update-profile-form'));
+            const response = await fetch('../../backend/profile/update_profile.php', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert(data.message);
+                loadProfile();
+            } else {
+                alert(data.error);
+            }
+        }
+
+        async function uploadProfilePicture() {
+            const formData = new FormData(document.getElementById('upload-picture-form'));
+            const response = await fetch('../../backend/profile/upload_picture.php', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert(data.message);
+                loadProfile();
+            } else {
+                alert(data.error);
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>
